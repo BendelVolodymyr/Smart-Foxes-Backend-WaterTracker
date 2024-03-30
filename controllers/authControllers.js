@@ -35,6 +35,6 @@ export const login = controllerWrapper(async (req, res) => {
   };
   const token = Jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
 
-  //   await User.findOneAndUpdate(user._id, { token });
+  // await User.findOneAndUpdate(user._id, { token });
   res.json({ email, token, gender });
 });
