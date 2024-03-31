@@ -1,20 +1,20 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 const usersSchema = new Schema(
   {
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: [true, "Password is required"],
     },
     email: {
       type: String,
-      required: [true, 'Email is required'],
+      required: [true, "Email is required"],
       unique: true,
     },
     subscription: {
       type: String,
-      enum: ['starter', 'pro', 'business'],
-      default: 'starter',
+      enum: ["starter", "pro", "business"],
+      default: "starter",
     },
     token: {
       type: String,
@@ -30,10 +30,10 @@ const usersSchema = new Schema(
     },
     verificationToken: {
       type: String,
-      required: [true, 'Verify token is required'],
+      required: [true, "Verify token is required"],
     },
   },
   { versionKey: false, timestamps: true }
 );
 
-export const User = model('users', usersSchema);
+export const User = model("users", usersSchema);
