@@ -3,19 +3,22 @@ import HttpError from "../helpers/HttpError.js";
 import crypto from "crypto";
 
 export const addPortion = async (req, res, next) => {
-  const { _id: owner, waterRate } = req.user;
-  const { portion, date } = req.body;
-  const dateAdded = new Date(date);
   try {
+    const { _id: owner, waterRate } = req.user;
+    const { portion, date } = req.body;
+    const dateAdded = new Date(date.replace(/T/, " "));
+
     const createPortion = await Water.create({
       dateAdded,
       portion,
       waterRate: 1500,
       owner,
     });
+
     if (!createPortion) {
-      throw HttpError(400);
+      throw HttpError(400, "Failed to add portion.");
     }
+
     return res.status(201).json({ data: createPortion });
   } catch (error) {
     next(error);
