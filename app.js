@@ -32,6 +32,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/users", authRouter, usersRouter);
+
 app.use("/api/waters", watersRouter);
 app.use("/api/water-rate", waterRateRouter);
 

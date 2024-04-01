@@ -1,21 +1,30 @@
-import { Schema, model } from 'mongoose';
-// потрібно уточнити що ще будем передавати!
-const watersSchema = new Schema(
+import { model, Schema } from "mongoose";
+
+const waterSchema = new Schema(
   {
+    dateAdded: {
+      type: Date,
+      require: true,
+    },
     waterRate: {
-      type: String,
-      required: [true, 'waterRate is required'],
+      type: Number,
+      require: true,
+      min: 0,
+      max: 5000,
     },
-    waterVolume: {
-      type: String,
-      required: [true, 'waterVolume is required'],
+    portion: {
+      type: Number,
+      require: true,
     },
-    date: {
-      type: String,
-      required: [true, 'date is required'],
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      require: true,
     },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false }
 );
 
-export const Waters = model('watersDays', watersSchema);
+const Water = model("watersDays", waterSchema);
+
+export default Water;
