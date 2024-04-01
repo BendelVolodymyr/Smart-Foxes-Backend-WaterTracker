@@ -9,6 +9,8 @@ const waterSchema = new Schema(
     waterRate: {
       type: Number,
       require: true,
+      min: 0,
+      max: 5000,
     },
     portion: {
       type: Number,
