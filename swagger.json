@@ -227,7 +227,7 @@
             "description": "User's email",
             "format": "email"
           },
-          "userName": {
+          "name": {
             "type": "string",
             "description": "User's name",
             "example": "Yuliya"
@@ -258,7 +258,7 @@
             "description": "User's email",
             "format": "email"
           },
-          "userName": {
+          "name": {
             "type": "string",
             "description": "User's name",
             "example": "Yuliya"

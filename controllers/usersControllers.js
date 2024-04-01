@@ -38,9 +38,11 @@ export const updateInfoUser = async (req, res) => {
   }
 
   const newPasswordHash = await bcrypt.hash(newPassword, 10);
+
   if (!newPasswordHash) {
     throw HttpError(400);
   }
+  const { _id, currentEmail } = req.user;
 
   if (newEmail && newEmail !== currentEmail) {
     const userChangeEmail = await User.findOne({ email: newEmail });
@@ -50,8 +52,7 @@ export const updateInfoUser = async (req, res) => {
     }
   }
 
-  const { _id } = req.user;
-  const user = await User.findByIdAndUpdate(_id.req.body);
+  const user = await User.findByIdAndUpdate(_id.req.body, { new: true });
 
   const { name = "", gender, email } = user;
   res.status(200).json({
