@@ -23,7 +23,7 @@
     }   
   ],
   "paths": {
-   "/users/avatars": {
+   "/api/users/avatars": {
       "patch": {
         "tags": ["User"],
         "summary": "Change user's avatar",
@@ -52,7 +52,7 @@
             }
           },
           "400": {
-            "description": "File not found, Avatar must be provided",
+            "description": "Avatar must be provided",
             "content": {}
           },
           "401": {
@@ -62,7 +62,7 @@
         }
       }
     },
-    "/users/current": {
+    "/api/users/current": {
       "get": {
         "tags": ["User"],
         "summary": "Get current user info",
@@ -86,7 +86,7 @@
         }
       }
     },
-    "/users/": {
+    "/api/users/": {
       "patch": {
         "tags": ["User"],
         "summary": "Update user profile",
@@ -125,7 +125,7 @@
         }
       }
     },
-     "/water-rate/": {
+     "/api/water-rate/": {
       "patch": {
         "tags": ["WaterRate"],
         "summary": "Change user's water rate",

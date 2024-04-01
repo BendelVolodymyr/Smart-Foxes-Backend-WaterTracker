@@ -20,7 +20,6 @@ const usersSchema = new Schema(
       default: 2000,
       min: 0,
       max: 15000,
-      required: true,
     },
     token: {
       type: String,
@@ -29,14 +28,6 @@ const usersSchema = new Schema(
     avatarURL: {
       type: String,
       required: true,
-    },
-    verify: {
-      type: Boolean,
-      default: false,
-    },
-    verificationToken: {
-      type: String,
-      required: [true, "Verify token is required"],
     },
   },
   { versionKey: false, timestamps: true }

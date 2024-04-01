@@ -31,9 +31,9 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 
-app.use("/users", authRouter, usersRouter);
+app.use("/api/users", authRouter, usersRouter);
 app.use("/api/waters", watersRouter);
-app.use("/water-rate", waterRateRouter);
+app.use("/api/water-rate", waterRateRouter);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
