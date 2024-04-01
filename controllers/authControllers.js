@@ -11,16 +11,23 @@ export const register = controllerWrapper(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user) {
-    throw HttpError(409, "Email is already in use");
+    throw HttpError(409, "Email in use");
   }
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = User.create({ ...req.body, password: hashedPassword });
+  const hashPassword = await bcrypt.hash(password, 10);
 
-  res.status(201).json(newUser);
+  const newUser = await User.create({ ...req.body, password: hashPassword });
+
+  const payload = {
+    id: newUser._id,
+  };
+  const token = Jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
+  await User.findOneAndUpdate({ userId: newUser._id }, { token });
+
+  res.status(201).json({ user: newUser, token });
 });
 
 export const login = controllerWrapper(async (req, res) => {
-  const { email, password, gender } = req.body;
+  const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email or password is incorrect");
@@ -34,7 +41,12 @@ export const login = controllerWrapper(async (req, res) => {
     id: user._id,
   };
   const token = Jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
+  await User.findOneAndUpdate(user._id, { token });
+  res.json({ email, token });
+});
 
-  // await User.findOneAndUpdate(user._id, { token });
-  res.json({ email, token, gender });
+export const logout = controllerWrapper(async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+  res.json("Logout success");
 });
