@@ -3,7 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
 import "dotenv/config";
-/* import authRouter from './routes/authRouter.js'; */
+import authRouter from "./routes/authRoutes.js";
 import watersRouter from "./routes/watersRoutes.js";
 
 const app = express();
@@ -26,8 +26,7 @@ mongoose
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
-
-/* app.use('/users', authRouter); */
+app.use("/api/users", authRouter);
 app.use("/api/waters", watersRouter);
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
