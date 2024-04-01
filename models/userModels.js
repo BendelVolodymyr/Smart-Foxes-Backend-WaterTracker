@@ -13,11 +13,11 @@ const usersSchema = new Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
-      minlength: 8,
-      maxlength: 64,
     },
     email: {
       type: String,
+      minlength: 8,
+      maxlength: 64,
       match: emailRegexp,
       required: [true, "Email is required"],
       unique: true,
@@ -25,13 +25,13 @@ const usersSchema = new Schema(
     gender: {
       type: String,
       enum: ["male", "female"],
-      default: "male",
     },
     waterRate: {
       type: Number,
+      default: 2000,
       min: 0,
       max: 15000,
-      default: 2000,
+      default: "male",
     },
     token: {
       type: String,
@@ -39,6 +39,7 @@ const usersSchema = new Schema(
     },
     avatarURL: {
       type: String,
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }

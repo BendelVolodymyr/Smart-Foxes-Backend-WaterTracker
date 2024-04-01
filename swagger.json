@@ -1,0 +1,304 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0.2",
+    "title": "Water tracker",
+    "description": "API documentation for project Water tracker",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "consumes": ["application/json",  "multipart/form-data"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "http://localhost:3000" }],
+  "tags": [
+     {
+      "name": "User",
+      "description": "User profile endpoints"
+    },
+    {
+      "name": "WaterRate",
+      "description": "User water rate endpoints"
+    }   
+  ],
+  "paths": {
+   "/api/users/avatars": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Change user's avatar",
+        "parameters": [],
+        "requestBody": {
+          "description": "Upload file new user's avatar",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUploadAvatarRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Avatar's URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserUploadAvatarResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Avatar must be provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/current": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get current user info",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": " Logged user returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCurrentInfoResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Update user profile",
+        "parameters": [],
+        "requestBody": {
+          "description": "Update user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateInfoRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Update user returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserUpdateInfoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized, wrong old password",
+            "content": {}
+          }
+        }
+      }
+    },
+     "/api/water-rate/": {
+      "patch": {
+        "tags": ["WaterRate"],
+        "summary": "Change user's water rate",
+        "parameters": [],
+        "requestBody": {
+          "description": "New water rate",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterRateRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "New water rate value",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterRateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+    }
+},
+  "components": {
+    "schemas": {
+      "UserUploadAvatarRequest": {
+        "type": "object",
+        "required": ["avatar"],
+        "properties": {
+          "avatar": {
+            "type": "string",
+            "description": "File of avatar",
+            "format": "binary"
+          }
+        }
+      },
+      "UserUploadAvatarResponse": {
+        "type": "object",
+        "properties": {
+          "avatarURL": {
+            "type": "string",
+            "description": "Avatar's URL",
+            "example": "url/avatars/id_avatar.jpg"
+          }
+        }
+      },
+      "UserCurrentInfoResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "userName": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Yuliya"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "User's avatar",
+            "example": "url/avatars/id_avatar.jpg"
+          },
+          "gender": {
+            "type": "string",
+            "description": "User's gender",
+            "example": "female",
+            "enum": ["male", "female"]
+          },
+          "waterRate": {
+            "type": "integer",
+            "description": "User's daily water rate",
+            "example": "15000"
+          }
+        }
+      },
+      "UserUpdateInfoRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Yuliya"
+          },
+          "gender": {
+            "type": "string",
+            "description": "User's gender",
+            "example": "female",
+            "enum": ["male", "female"]
+          },
+          "oldPassword": {
+            "type": "string",
+            "description": "Old user's password",
+            "example": "qwerty123"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "New user's password",
+            "example": "qwerty123..."
+          }
+        }
+      },
+      "UserUpdateInfoResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Yuliya"
+          },
+          "gender": {
+            "type": "string",
+            "description": "User's gender",
+            "example": "female",
+            "enum": ["male", "female"]
+          }
+        }
+      },
+      "WaterRateRequest":{
+        "type": "object",
+        "required": ["waterRate"],
+        "properties": {
+          "waterRate": {
+            "type": "integer",
+            "description": "User's water rate",
+            "example": 15000
+          }
+        }
+      },
+      "WaterRateResponse": {
+      "type": "object",
+        "properties": {
+          "waterRate": {
+            "type": "integer",
+            "description": "User's water rate",
+            "example": 15000
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
