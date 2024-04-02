@@ -7,7 +7,12 @@ import Jwt from "jsonwebtoken";
 const { SECRET_KEY } = process.env;
 
 export const register = controllerWrapper(async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, repeatedPassword } = req.body;
+
+  if (password !== repeatedPassword) {
+    throw HttpError(400, "Passwords do not match");
+  }
+
   const user = await User.findOne({ email });
 
   if (user) {

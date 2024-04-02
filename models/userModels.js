@@ -48,9 +48,10 @@ const usersSchema = new Schema(
 usersSchema.post("save", handleMongooseError);
 
 export const registerSchema = Joi.object({
-  name: Joi.string().required(),
+  name: Joi.string(),
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(8).max(64).required(),
+  repeatedPassword: Joi.string().min(8).max(64).required(), //додав це поле
   gender: Joi.string(),
 });
 
