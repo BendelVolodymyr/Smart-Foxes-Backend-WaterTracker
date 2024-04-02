@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import { User } from "../models/userModels.js";
-//import fs from "fs/promises";
 import HttpError from "../helpers/HttpError.js";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
@@ -20,46 +19,43 @@ export const getCurrentUser = (req, res) => {
   });
 };
 
-export const updateInfoUser = async (req, res) => {
-  const { oldPassword, newPassword, newEmail } = req.body;
-
-  if (!newPassword) {
-    throw HttpError(400, "New password not found");
-  }
-  if (oldPassword === newPassword) {
-    throw HttpError(
-      400,
-      "The new password must be different from the old password"
-    );
-  }
-  const passwordCompare = await bcrypt.compare(oldPassword, req.user.password);
-  if (!passwordCompare) {
-    throw HttpError(401, "Old password is wrong");
-  }
-
-  const newPasswordHash = await bcrypt.hash(newPassword, 10);
-
-  if (!newPasswordHash) {
-    throw HttpError(400);
-  }
-  const { _id, currentEmail } = req.user;
-
-  if (newEmail && newEmail !== currentEmail) {
-    const userChangeEmail = await User.findOne({ email: newEmail });
-
-    if (userChangeEmail) {
-      throw HttpError(409, "Email is already in use");
+export const updateInfoUser = async (req, res, next) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    if (oldPassword) {
+      if (!newPassword) throw HttpError(400, "New password not found");
+      if (oldPassword === newPassword)
+        throw HttpError(
+          400,
+          "The new password must be different from the old password"
+        );
+      const passwordCompare = await bcrypt.compare(
+        oldPassword,
+        req.user.password
+      );
+      if (!passwordCompare) {
+        throw HttpError(401, "Old Password is wrong");
+      }
     }
+
+    if (newPassword) {
+      if (!oldPassword) throw HttpError(400, "Old password not found");
+      delete req.body.oldPassword;
+      req.body.password = await bcrypt.hash(newPassword, 10);
+      delete req.body.newPassword;
+    }
+
+    const { _id } = req.user;
+    const user = await User.findByIdAndUpdate(_id, req.body);
+    const { name, gender, email } = user;
+    res.json({
+      name,
+      gender,
+      email,
+    });
+  } catch (error) {
+    next(error);
   }
-
-  const user = await User.findByIdAndUpdate(_id.req.body, { new: true });
-
-  const { name = "", gender, email } = user;
-  res.status(200).json({
-    email,
-    name,
-    gender,
-  });
 };
 
 export const uploadAvatarUser = async (req, res, next) => {

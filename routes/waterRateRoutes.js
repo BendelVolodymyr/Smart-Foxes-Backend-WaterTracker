@@ -2,9 +2,15 @@ import express from "express";
 import { updateWaterRate } from "../controllers/waterRateControllers.js";
 import userSchemaWaterRate from "../shemas/waterRateSchema.js";
 import validateBody from "../helpers/validateBody.js";
+import { authenticate } from "../middlewares/auth.js";
 
 const waterRateRouter = express.Router();
 
-waterRateRouter.patch("/", validateBody(userSchemaWaterRate), updateWaterRate); //потрібно додати міделвару авторизації
+waterRateRouter.patch(
+  "/",
+  authenticate,
+  validateBody(userSchemaWaterRate),
+  updateWaterRate
+);
 
 export default waterRateRouter;
