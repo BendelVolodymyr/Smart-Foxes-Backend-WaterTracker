@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "2.0.2",
+    "version": "2.0.3",
     "title": "Water tracker",
     "description": "API documentation for project Water tracker",
     "license": {
@@ -9,21 +9,63 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "consumes": ["application/json",  "multipart/form-data"],
+  "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
   "servers": [{ "url": "http://localhost:3000" }],
   "tags": [
-     {
+    {
+      "name": "Auth",
+      "description": "Authorisation routes/endpoints"
+    },
+    {
       "name": "User",
       "description": "User profile endpoints"
     },
     {
       "name": "WaterRate",
       "description": "User water rate endpoints"
-    }   
+    }
   ],
   "paths": {
-   "/api/users/avatars": {
+    "/api/users/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Registration object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RegisterSchemaRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterSchemaResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+
+          "409": {
+            "description": "Conflict",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/avatars": {
       "patch": {
         "tags": ["User"],
         "summary": "Change user's avatar",
@@ -39,7 +81,7 @@
             }
           }
         },
-        "security": [{ "Bearer": [] }],
+
         "responses": {
           "200": {
             "description": "Avatar's URL",
@@ -125,7 +167,7 @@
         }
       }
     },
-     "/api/water-rate/": {
+    "/api/water-rate/": {
       "patch": {
         "tags": ["WaterRate"],
         "summary": "Change user's water rate",
@@ -164,9 +206,45 @@
         }
       }
     }
-},
+  },
   "components": {
     "schemas": {
+      "RegisterSchemaRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User`s email",
+            "format": "email"
+          },
+
+          "password": {
+            "type": "string",
+            "description": "User`s password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "RegisterSchemaResponse": {
+        "type": "object",
+
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User`s email",
+            "format": "email"
+          },
+
+          "token": {
+            "type": "string",
+            "description": "User`s token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGM3OTM0MThkN2ViNDgwOWY5YmM1NCIsImlhdCI6MTcxMjA5MzQ5MiwiZXhwIjoxNzEyMTc5ODkyfQ.EtuDH-CAYoG5xMI1Kpo8VniyruABBnOPoCqPpBM5fMM"
+          }
+        }
+      },
+
       "UserUploadAvatarRequest": {
         "type": "object",
         "required": ["avatar"],
@@ -271,7 +349,7 @@
           }
         }
       },
-      "WaterRateRequest":{
+      "WaterRateRequest": {
         "type": "object",
         "required": ["waterRate"],
         "properties": {
@@ -283,7 +361,7 @@
         }
       },
       "WaterRateResponse": {
-      "type": "object",
+        "type": "object",
         "properties": {
           "waterRate": {
             "type": "integer",
