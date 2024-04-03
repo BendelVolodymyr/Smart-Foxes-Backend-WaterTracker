@@ -14,17 +14,24 @@ import {
 import { authenticate } from "../middlewares/auth.js";
 import isValidId from "../middlewares/isValiId.js";
 
-const waterRouter = express.Router();
-waterRouter.post("/", authenticate, validateBody(addPortionSchema), addPortion);
-waterRouter.patch(
+const watersRouter = express.Router();
+
+watersRouter.post(
+  "/",
+  authenticate,
+  validateBody(addPortionSchema),
+  addPortion
+);
+
+watersRouter.patch(
   "/:id",
   authenticate,
   isValidId,
   validateBody(updatePortionSchema),
   updatePortion
 );
-waterRouter.delete("/:id", authenticate, isValidId, deletePortion);
-waterRouter.get("/today", authenticate, portionsPerDay);
-waterRouter.get("/month", authenticate, portionsPerMonth);
+watersRouter.delete("/:id", authenticate, isValidId, deletePortion);
+watersRouter.get("/today", authenticate, portionsPerDay);
+watersRouter.get("/month", authenticate, portionsPerMonth);
 
-export default waterRouter;
+export default watersRouter;

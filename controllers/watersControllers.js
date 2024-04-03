@@ -15,7 +15,14 @@ export const addPortion = controllerWrapper(async (req, res) => {
   if (!createPortion) {
     throw HttpError(400, "Failed to add portion.");
   }
-  return res.status(201).json({ data: createPortion });
+  const { _id } = createPortion;
+  return res.status(201).json({
+    data: {
+      _id,
+      dateAdded,
+      waterVolume,
+    },
+  });
 });
 
 export const updatePortion = controllerWrapper(async (req, res) => {
@@ -30,7 +37,8 @@ export const updatePortion = controllerWrapper(async (req, res) => {
   if (!dataUpdated) {
     throw HttpError(404, "Update failed. Please try again later.");
   }
-  res.json({ data: dataUpdated });
+  const { dateAdded } = dataUpdated;
+  res.json({ data: { id, waterVolume, dateAdded } });
 });
 
 export const deletePortion = controllerWrapper(async (req, res) => {
@@ -42,7 +50,7 @@ export const deletePortion = controllerWrapper(async (req, res) => {
   }
   res.json({
     data: deletedPortion,
-    message: "Portion successfully deleted.",
+    message: "The portion was successfully deleted.",
   });
 });
 
@@ -105,8 +113,8 @@ export const portionsPerMonth = controllerWrapper(async (req, res) => {
     {
       $group: {
         _id: { $dateToString: { format: "%Y-%m-%d", date: "$dateAdded" } },
-        totalPortions: { $sum: "$waterVolume" },
-        count: { $sum: 1 },
+        totalWaterDrunk: { $sum: "$waterVolume" },
+        totalPortions: { $sum: 1 },
         waterRate: { $last: "$waterRate" },
       },
     },
@@ -116,6 +124,7 @@ export const portionsPerMonth = controllerWrapper(async (req, res) => {
       },
     },
   ]);
+
   if (!dataForTheMonth.length) {
     return res.json({
       data: {
@@ -127,7 +136,7 @@ export const portionsPerMonth = controllerWrapper(async (req, res) => {
 
   const monthData = dataForTheMonth.map((el) => {
     const percentagePerDay = Math.round(
-      (el.totalPortions / el.waterRate) * 100
+      (el.totalWaterDrunk / el.waterRate) * 100
     );
     const date = new Date(el._id);
     const monthName = date.toLocaleString("en-US", { month: "long" });
