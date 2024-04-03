@@ -2,7 +2,7 @@ import express from "express";
 import validateBody from "../helpers/validateBody.js";
 import { registerSchema, loginSchema } from "../models/userModels.js";
 import { login, logout, register } from "../controllers/authControllers.js";
-import autorization from "../middlewares/authorization.js";
+import { authenticate } from "../middlewares/auth.js";
 
 const authRouter = express.Router();
 
@@ -13,6 +13,6 @@ authRouter.post("/register", validateBody(registerSchema), register);
 authRouter.post("/login", validateBody(loginSchema), login);
 
 // logout
-authRouter.post("/logout", autorization, logout);
+authRouter.post("/logout", authenticate, logout);
 
 export default authRouter;

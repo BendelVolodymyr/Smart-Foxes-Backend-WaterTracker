@@ -1,6 +1,6 @@
 import Water from "../models/watersModel.js";
 import HttpError from "../helpers/HttpError.js";
-import controllerWrapper from "../helpers/controllerWraper.js";
+import controllerWrapper from "../helpers/controllerWrapper.js";
 
 export const addPortion = controllerWrapper(async (req, res) => {
   const { _id: owner, waterRate } = req.user;

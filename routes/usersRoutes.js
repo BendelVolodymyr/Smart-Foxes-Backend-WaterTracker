@@ -6,7 +6,7 @@ import {
 } from "../controllers/usersControllers.js";
 import { upload } from "../middlewares/upload.js";
 import validateBody from "../helpers/validateBody.js";
-import { updateUserSchema } from "../shemas/userSchema.js";
+import { updateUserSchema } from "../sсhemas/userSchema.js";
 import { authenticate } from "../middlewares/auth.js";
 
 const usersRouter = express.Router();
