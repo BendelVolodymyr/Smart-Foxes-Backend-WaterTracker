@@ -7,14 +7,17 @@ const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const usersSchema = new Schema(
   {
     name: {
-      type: String,
-      required: [true, "Please, set user name"],
+      type: String, //прибрала required()
     },
     password: {
       type: String,
       required: [true, "Password is required"],
-      minlength: 8,
-      maxlength: 64,
+    },
+    oldPassword: {
+      type: String,
+    },
+    newPassword: {
+      type: String,
     },
     email: {
       type: String,
@@ -31,7 +34,6 @@ const usersSchema = new Schema(
       type: Number,
       min: 0,
       max: 15000,
-      default: 2000,
     },
     token: {
       type: String,
@@ -39,6 +41,7 @@ const usersSchema = new Schema(
     },
     avatarURL: {
       type: String,
+      default: null,
     },
   },
   { versionKey: false, timestamps: true }
@@ -47,7 +50,7 @@ const usersSchema = new Schema(
 usersSchema.post("save", handleMongooseError);
 
 export const registerSchema = Joi.object({
-  name: Joi.string().required(),
+  name: Joi.string(), //прибрала required()
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(8).max(64).required(),
   gender: Joi.string(),

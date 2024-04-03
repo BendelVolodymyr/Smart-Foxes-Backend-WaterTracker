@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import { User } from "../models/userModels.js";
-//import fs from "fs/promises";
 import HttpError from "../helpers/HttpError.js";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";

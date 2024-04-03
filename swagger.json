@@ -509,7 +509,7 @@
             "description": "User's email",
             "format": "email"
           },
-          "userName": {
+          "name": {
             "type": "string",
             "description": "User's name",
             "example": "Yuliya"
@@ -528,7 +528,7 @@
           "waterRate": {
             "type": "integer",
             "description": "User's daily water rate",
-            "example": "15000"
+            "example": "2000"
           }
         }
       },
@@ -591,7 +591,7 @@
           "waterRate": {
             "type": "integer",
             "description": "User's water rate",
-            "example": 15000
+            "example": 2000
           }
         }
       },
@@ -601,7 +601,7 @@
           "waterRate": {
             "type": "integer",
             "description": "User's water rate",
-            "example": 15000
+            "example": 2000
           }
         }
       },
