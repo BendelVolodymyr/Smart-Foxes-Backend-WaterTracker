@@ -13,11 +13,11 @@ const usersSchema = new Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
+      minlength: 8,
+      maxlength: 64,
     },
     email: {
       type: String,
-      minlength: 8,
-      maxlength: 64,
       match: emailRegexp,
       required: [true, "Email is required"],
       unique: true,
@@ -25,13 +25,13 @@ const usersSchema = new Schema(
     gender: {
       type: String,
       enum: ["male", "female"],
+      default: "male",
     },
     waterRate: {
       type: Number,
-      default: 2000,
       min: 0,
       max: 15000,
-      default: "male",
+      default: 2000,
     },
     token: {
       type: String,
@@ -39,7 +39,6 @@ const usersSchema = new Schema(
     },
     avatarURL: {
       type: String,
-      required: true,
     },
   },
   { versionKey: false, timestamps: true }
@@ -59,4 +58,12 @@ export const loginSchema = Joi.object({
   password: Joi.string().min(8).max(64).required(),
 });
 
+export const updateUserSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string().pattern(emailRegexp).required(),
+  password: Joi.string().required(),
+  newPassword: Joi.string().required(),
+  gender: Joi.string(),
+  avatarURL: Joi.string(),
+});
 export const User = model("users", usersSchema);

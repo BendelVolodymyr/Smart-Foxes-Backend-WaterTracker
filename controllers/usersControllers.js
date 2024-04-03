@@ -10,7 +10,7 @@ import * as crypto from "node:crypto";
 const avatarsDir = path.join(process.cwd(), "public/avatars");
 
 export const getCurrentUser = (req, res) => {
-  const { email, avatarURL = "", gender, waterRate, name = "" } = req.user;
+  const { email, avatarURL = null, gender, waterRate, name = "" } = req.user;
   res.json({
     email,
     avatarURL,
@@ -20,46 +20,54 @@ export const getCurrentUser = (req, res) => {
   });
 };
 
-export const updateInfoUser = async (req, res) => {
-  const { oldPassword, newPassword, newEmail } = req.body;
+export const updateInfoUser = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const { password, newPassword } = req.body;
 
-  if (!newPassword) {
-    throw HttpError(400, "New password not found");
-  }
-  if (oldPassword === newPassword) {
-    throw HttpError(
-      400,
-      "The new password must be different from the old password"
-    );
-  }
-  const passwordCompare = await bcrypt.compare(oldPassword, req.user.password);
-  if (!passwordCompare) {
-    throw HttpError(401, "Old password is wrong");
-  }
-
-  const newPasswordHash = await bcrypt.hash(newPassword, 10);
-
-  if (!newPasswordHash) {
-    throw HttpError(400);
-  }
-  const { _id, currentEmail } = req.user;
-
-  if (newEmail && newEmail !== currentEmail) {
-    const userChangeEmail = await User.findOne({ email: newEmail });
-
-    if (userChangeEmail) {
-      throw HttpError(409, "Email is already in use");
+    if (!newPassword) {
+      throw HttpError(400, "New password not found");
     }
+    if (password === newPassword) {
+      throw HttpError(
+        400,
+        "The new password must be different from the old password"
+      );
+    }
+    const passwordCompare = await bcrypt.compare(password, req.user.password);
+    if (!passwordCompare) {
+      throw HttpError(401, "Old password is wrong");
+    }
+
+    const newPasswordHash = await bcrypt.hash(newPassword, 10);
+
+    if (!newPasswordHash) {
+      throw HttpError(400);
+    }
+
+    /* думаю, що перевірка на email, взагалі не потрібна, всеодно в  findByIdAndUpdate передаємо весь body*/
+    /*const { _id, currentEmail } = req.user;
+    
+      if (newEmail && newEmail !== currentEmail) {
+      const userChangeEmail = await User.findOne({ email: newEmail });
+
+      if (userChangeEmail) {
+        throw HttpError(409, "Email is already in use");
+      }
+    } */
+    const { name, email, password: newPassword, gender } = req.body;
+
+    const user = await User.findByIdAndUpdate(req.user._id, req.body, {
+      new: true,
+    });
+    /* 
+    const { name = "", gender, email } = user; */
+    res.status(200).json({
+      user,
+    });
+  } catch (error) {
+    next(error);
   }
-
-  const user = await User.findByIdAndUpdate(_id.req.body, { new: true });
-
-  const { name = "", gender, email } = user;
-  res.status(200).json({
-    email,
-    name,
-    gender,
-  });
 };
 
 export const uploadAvatarUser = async (req, res, next) => {
