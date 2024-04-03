@@ -9,7 +9,7 @@ import * as crypto from "node:crypto";
 const avatarsDir = path.join(process.cwd(), "public/avatars");
 
 export const getCurrentUser = (req, res) => {
-  const { email, avatarURL = "", gender, waterRate, name = "" } = req.user;
+  const { email, avatarURL = null, gender, waterRate, name = "" } = req.user;
   res.json({
     email,
     avatarURL,
