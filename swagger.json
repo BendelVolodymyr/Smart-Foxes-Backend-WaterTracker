@@ -114,7 +114,7 @@
           "204": {
             "description": "User signed out"
           },
-          "404": {
+          "401": {
             "description": "Unauthorized",
             "content": {
               "application/json": {
