@@ -12,7 +12,7 @@ const waterSchema = new Schema(
       min: 0,
       max: 5000,
     },
-    portion: {
+    waterVolume: {
       type: Number,
       require: true,
     },

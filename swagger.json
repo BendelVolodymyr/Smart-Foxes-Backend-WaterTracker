@@ -9,21 +9,28 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "consumes": ["application/json",  "multipart/form-data"],
+  "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3000" }],
+  "servers": [
+    { "url": "http://localhost:3000" },
+    { "url": "https://smart-foxes-backend-watertracker.onrender.com" }
+  ],
   "tags": [
-     {
+    {
       "name": "User",
       "description": "User profile endpoints"
     },
     {
       "name": "WaterRate",
       "description": "User water rate endpoints"
-    }   
+    },
+    {
+      "name": "Water",
+      "description": "Water endpoints"
+    }
   ],
   "paths": {
-   "/api/users/avatars": {
+    "/api/users/avatars": {
       "patch": {
         "tags": ["User"],
         "summary": "Change user's avatar",
@@ -125,7 +132,7 @@
         }
       }
     },
-     "/api/water-rate/": {
+    "/api/water-rate/": {
       "patch": {
         "tags": ["WaterRate"],
         "summary": "Change user's water rate",
@@ -163,8 +170,314 @@
           }
         }
       }
+    },
+    "/api/waters": {
+      "post": {
+        "tags": ["Water"],
+        "summary": "Adding a portion of water",
+        "requestBody": {
+          "description": "Adding a portion of water",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterAddingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterAddingResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }]
+      }
+    },
+
+    "/api/waters/{id}": {
+      "delete": {
+        "tags": ["Water"],
+        "summary": "Removing a portion of water",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Portion`s id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The portion was successfully deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterDeleteResponse"
+                }
+              }
+            }
+          },
+
+          "401": {
+            "description": "Unauthorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Delete failed. Please try again later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "patch": {
+        "tags": ["Water"],
+        "summary": "Updating a portion of water",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Portion`s id"
+          }
+        ],
+        "requestBody": {
+          "description": "Editing a portion of water",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePortionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatingPortionResponse"
+                }
+              }
+            }
+          },
+
+          "401": {
+            "description": "Unauthorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/waters/today": {
+      "get": {
+        "tags": ["Water"],
+        "summary": "Get today water data",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "date=2024-04-13"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortionsPerDay"
+                }
+              }
+            }
+          },
+
+          "401": {
+            "description": "Unauthorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/waters/month": {
+      "get": {
+        "tags": ["Water"],
+        "summary": "Get month portions data",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "2024-04-01"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "2024-04-30"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortionsPerMonth"
+                }
+              }
+            }
+          },
+
+          "401": {
+            "description": "Unauthorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
-},
+  },
   "components": {
     "schemas": {
       "UserUploadAvatarRequest": {
@@ -271,7 +584,7 @@
           }
         }
       },
-      "WaterRateRequest":{
+      "WaterRateRequest": {
         "type": "object",
         "required": ["waterRate"],
         "properties": {
@@ -283,12 +596,206 @@
         }
       },
       "WaterRateResponse": {
-      "type": "object",
+        "type": "object",
         "properties": {
           "waterRate": {
             "type": "integer",
             "description": "User's water rate",
             "example": 2000
+          }
+        }
+      },
+      "WaterAddingRequest": {
+        "type": "object",
+        "required": ["waterVolume", "date"],
+        "properties": {
+          "waterVolume": {
+            "type": "integer",
+            "example": 200
+          },
+          "date": {
+            "type": "string",
+            "example": "2024-04-13T02:40:00.000Z"
+          }
+        }
+      },
+      "WaterAddingResponse": {
+        "type": "object",
+        "properties": {
+          "dateAdded": {
+            "type": "string",
+            "example": "2024-04-13T02:40:00.000Z"
+          },
+          "waterVolume": {
+            "type": "integer",
+            "example": 200
+          },
+          "_id": {
+            "type": "string",
+            "example": "660d1669c6da2477d73d6371"
+          }
+        }
+      },
+      "UnauthorizationResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message",
+            "example": "Not authorized"
+          }
+        }
+      },
+      "BadRequestResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message",
+            "example": "Bad request"
+          }
+        }
+      },
+      "WaterDeleteRequest": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "660d2b2c8771d1351ec5ab85",
+            "description": "ID of the portion to be deleted"
+          }
+        }
+      },
+      "WaterDeleteResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "660d1669c6da2477d73d6371"
+          },
+          "massage": {
+            "type": "string",
+            "example": "The portion was successfully deleted."
+          }
+        }
+      },
+      "NotFoundResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message",
+            "example": "Not found"
+          }
+        }
+      },
+      "UpdatePortionRequest": {
+        "type": "object",
+        "required": ["waterVolume"],
+        "properties": {
+          "waterVolume": {
+            "type": "integer",
+            "example": 200
+          }
+        }
+      },
+      "UpdatingPortionResponse": {
+        "type": "object",
+        "properties": {
+          "dateAdded": {
+            "type": "string",
+            "example": "2024-04-13T02:40:00.000Z"
+          },
+          "waterVolume": {
+            "type": "integer",
+            "example": 200
+          },
+          "_id": {
+            "type": "string",
+            "example": "660d1669c6da2477d73d6371"
+          }
+        }
+      },
+      "PortionsPerDay": {
+        "type": "object",
+        "properties": {
+          "sumPortions": {
+            "type": "integer",
+            "example": 4
+          },
+          "countPercentage": {
+            "type": "integer",
+            "example": 100
+          },
+          "portions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "example": "660d1669c6da2477d73d6371"
+                },
+                "dateAdded": {
+                  "type": "string",
+                  "example": "2024-04-13T02:40:00.000Z"
+                },
+                "waterRate": {
+                  "type": "integer",
+                  "example": 2000
+                },
+                "waterVolume": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "owner": {
+                  "type": "string",
+                  "example": "660d1669c6da2477d73d6371"
+                },
+                "percentage": {
+                  "type": "integer",
+                  "example": 80
+                }
+              }
+            }
+          }
+        }
+      },
+      "PortionsPerMonth": {
+        "type": "object",
+        "properties": {
+          "monthData": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "example": "2024-04-13"
+                },
+                "waterRate": {
+                  "type": "integer",
+                  "example": 2000
+                },
+                "totalWaterDrunk": {
+                  "type": "integer",
+                  "example": 4000
+                },
+                "totalPortions": {
+                  "type": "integer",
+                  "example": 20
+                },
+                "date": {
+                  "type": "string",
+                  "example": "13, April"
+                },
+                "percentagePerDay": {
+                  "type": "integer",
+                  "example": 80
+                }
+              }
+            }
           }
         }
       }
