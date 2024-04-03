@@ -11,7 +11,10 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3000" }],
+  "servers": [
+    { "url": "http://localhost:3000" },
+    { "url": "https://smart-foxes-backend-watertracker.onrender.com" }
+  ],
   "tags": [
     {
       "name": "Auth",
@@ -62,6 +65,52 @@
             "description": "Conflict",
             "content": {}
           }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Passing an authentication check",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginSchemaRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User login successfully/OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/LoginSchemaResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "api/users/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Logout from application"
         }
       }
     },
@@ -228,6 +277,42 @@
         }
       },
       "RegisterSchemaResponse": {
+        "type": "object",
+
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User`s email",
+            "format": "email"
+          },
+
+          "token": {
+            "type": "string",
+            "description": "User`s token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGM3OTM0MThkN2ViNDgwOWY5YmM1NCIsImlhdCI6MTcxMjA5MzQ5MiwiZXhwIjoxNzEyMTc5ODkyfQ.EtuDH-CAYoG5xMI1Kpo8VniyruABBnOPoCqPpBM5fMM"
+          }
+        }
+      },
+
+      "LoginSchemaRequest": {
+        "type": "object",
+
+        "required": ["email", "password"],
+
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User`s email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User`s password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "LoginSchemaResponse": {
         "type": "object",
 
         "properties": {
