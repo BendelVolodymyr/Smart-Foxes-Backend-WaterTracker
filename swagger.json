@@ -112,7 +112,12 @@
         "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
-            "description": "User signed out"
+            "description": "User signed out",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessLogoutSchema" }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized",
@@ -338,6 +343,17 @@
             "type": "string",
             "description": "User`s token",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGM3OTM0MThkN2ViNDgwOWY5YmM1NCIsImlhdCI6MTcxMjA5MzQ5MiwiZXhwIjoxNzEyMTc5ODkyfQ.EtuDH-CAYoG5xMI1Kpo8VniyruABBnOPoCqPpBM5fMM"
+          }
+        }
+      },
+
+      "SuccessLogoutSchema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Login out successfull",
+            "example": "Logout success"
           }
         }
       },
