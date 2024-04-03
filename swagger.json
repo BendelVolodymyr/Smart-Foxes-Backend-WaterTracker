@@ -111,7 +111,7 @@
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "responses": {
-          "204": {
+          "200": {
             "description": "User signed out"
           },
           "401": {
