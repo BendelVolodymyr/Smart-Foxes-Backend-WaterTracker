@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "2.0.3",
+    "version": "2.0.4",
     "title": "Water tracker",
     "description": "API documentation for project Water tracker",
     "license": {
@@ -17,20 +17,16 @@
   ],
   "tags": [
     {
-
       "name": "Auth",
       "description": "Authorisation routes/endpoints"
     },
     {
-
-
       "name": "User",
       "description": "User profile endpoints"
     },
     {
       "name": "WaterRate",
       "description": "User water rate endpoints"
-
     }
   ],
   "paths": {
@@ -39,7 +35,6 @@
         "tags": ["Auth"],
         "summary": "User registration",
         "parameters": [],
-        "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Registration object",
           "required": true,
@@ -107,19 +102,33 @@
         }
       }
     },
-    "api/users/logout": {
+
+    "/api/users/logout": {
       "post": {
         "tags": ["Auth"],
         "summary": "Logout",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Logout from application"
+        "responses": {
+          "200": {
+            "description": "User signed out",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessLogoutSchema" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/LogoutFailedSchema" }
+              }
+            }
+          }
         }
       }
     },
-
-    
 
     "/api/users/avatars": {
       "patch": {
@@ -567,8 +576,62 @@
           }
         }
       }
+    },
+
+    "/api/users/passwordReset": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Sending the message to the user's email",
+        "parameters": [],
+        "requestBody": {
+          "description": "Reset password",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordResponse"
+                }
+              }
+            }
+          },
+
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
+
   "components": {
     "schemas": {
       "RegisterSchemaRequest": {
@@ -639,6 +702,28 @@
             "type": "string",
             "description": "User`s token",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGM3OTM0MThkN2ViNDgwOWY5YmM1NCIsImlhdCI6MTcxMjA5MzQ5MiwiZXhwIjoxNzEyMTc5ODkyfQ.EtuDH-CAYoG5xMI1Kpo8VniyruABBnOPoCqPpBM5fMM"
+          }
+        }
+      },
+
+      "SuccessLogoutSchema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Login out successfull",
+            "example": "Logout success"
+          }
+        }
+      },
+
+      "LogoutFailedSchema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Error authentication ",
+            "example": "Authentication failed. Please log in."
           }
         }
       },
@@ -961,8 +1046,29 @@
             }
           }
         }
+      },
+
+      "ResetPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          }
+        }
+      },
+      "ResetPasswordResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Email sent"
+          }
+        }
       }
     },
+
     "securitySchemes": {
       "Bearer": {
         "type": "http",
