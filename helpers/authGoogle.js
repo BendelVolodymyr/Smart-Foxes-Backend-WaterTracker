@@ -4,7 +4,7 @@ import Jwt from "jsonwebtoken";
 //import HttpError from "./HttpError.js";
 //import bcrypt from "bcrypt";
 
-export const authGoogle = async (userData) => {
+export const authGoogleHelper = async (userData) => {
   const { email } = userData;
 
   let user = await User.findOne({ email }).select("+password");
