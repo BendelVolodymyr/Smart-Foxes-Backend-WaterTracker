@@ -19,7 +19,7 @@ export const authGoogleHelper = async (userData) => {
   }
 
   const payload = {
-    id: newUser._id,
+    id: user._id,
   };
   const token = Jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
   user.token = token;
