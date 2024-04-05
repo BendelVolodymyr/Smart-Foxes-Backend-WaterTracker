@@ -46,7 +46,9 @@ export const updateInfoUser = async (req, res, next) => {
     }
 
     const { _id } = req.user;
-    const user = await User.findByIdAndUpdate(_id, req.body);
+    const user = await User.findByIdAndUpdate(_id, req.body, {
+      new: true,
+    });
     const { name, gender, email } = user;
     res.json({
       name,
