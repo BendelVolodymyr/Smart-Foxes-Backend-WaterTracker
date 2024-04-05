@@ -5,10 +5,11 @@ import {
   login,
   logout,
   register,
-  resetPasswordSchema,
+  passwordReset,
+  passwordChange,
 } from "../controllers/authControllers.js";
 import { authenticate } from "../middlewares/auth.js";
-import { passwordResetSchema } from "../sсhemas/userSchema.js";
+import { passwordForgotSchema } from "../sсhemas/userSchema.js";
 
 const authRouter = express.Router();
 
@@ -23,8 +24,10 @@ authRouter.post("/logout", authenticate, logout);
 // update password
 authRouter.post(
   "/passwordReset",
-  validateBody(passwordResetSchema),
-  resetPasswordSchema
+  validateBody(passwordForgotSchema),
+  passwordReset
 );
+
+authRouter.patch("/updatePassword/:userId/:temporaryId", passwordChange);
 
 export default authRouter;

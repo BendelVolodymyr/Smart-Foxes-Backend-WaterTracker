@@ -578,18 +578,18 @@
       }
     },
 
-    "/api/users/passwordReset": {
+    "/api/users/passwordForgot": {
       "post": {
         "tags": ["Auth"],
         "summary": "Sending the message to the user's email",
         "parameters": [],
         "requestBody": {
-          "description": "Reset password",
+          "description": "Forgot password",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ResetPasswordRequest"
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
               }
             }
           }
@@ -601,7 +601,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResetPasswordResponse"
+                  "$ref": "#/components/schemas/ForgotPasswordResponse"
                 }
               }
             }
@@ -1048,7 +1048,7 @@
         }
       },
 
-      "ResetPasswordRequest": {
+      "ForgotPasswordRequest": {
         "type": "object",
         "properties": {
           "email": {
@@ -1058,7 +1058,7 @@
           }
         }
       },
-      "ResetPasswordResponse": {
+      "ForgotPasswordResponse": {
         "type": "object",
         "properties": {
           "message": {

@@ -17,6 +17,6 @@ export const updateUserSchema = Joi.object({
   avatarURL: Joi.string(),
 });
 
-export const passwordResetSchema = Joi.object({
+export const passwordForgotSchema = Joi.object({
   email: Joi.string().email().required(),
 });
