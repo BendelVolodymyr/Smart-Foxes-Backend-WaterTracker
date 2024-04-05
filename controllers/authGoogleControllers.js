@@ -3,10 +3,16 @@ import queryString from "query-string";
 import axios from "axios";
 import { authGoogleHelper } from "../helpers/authGoogle.js";
 
+const { BACKEND_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, FRONTEND_URL } =
+  process.env;
+
+// const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, TEST_BACK, TEST_FRONT } =
+//   process.env;
+
 export const googleAuth = async (req, res) => {
   const stringifiedParams = queryString.stringify({
-    client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri: `${process.env.BASE_URL_HOST}/api/auth/google-redirect`,
+    client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: `${BACKEND_URL}/api/auth/google-redirect`,
     scope: [
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile",
@@ -30,9 +36,9 @@ export const googleRedirect = async (req, res) => {
     url: `https://oauth2.googleapis.com/token`,
     method: "post",
     data: {
-      client_id: process.env.GOOGLE_CLIENT_ID,
-      client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: `${process.env.BASE_URL_HOST}/api/auth/google-redirect`,
+      client_id: GOOGLE_CLIENT_ID,
+      client_secret: GOOGLE_CLIENT_SECRET,
+      redirect_uri: `${BACKEND_URL}}/api/auth/google-redirect`,
       grant_type: "authorization_code",
       code,
     },
@@ -48,5 +54,7 @@ export const googleRedirect = async (req, res) => {
 
   const { token } = await authGoogleHelper(userData.data);
 
-  return res.redirect(`${process.env.FRONTEND_URL}/api/auth?token=${token}`);
+  return res.redirect(`${FRONTEND_URL}/api/auth?token=${token}`);
+  // userData.data.email;
+  //return res.redirect(`${TEST_FRONT}?email=${userData.data.email}`);
 };
