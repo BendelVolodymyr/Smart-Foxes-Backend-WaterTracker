@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import Jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import crypto from "node:crypto";
+import timing from "../helpers/timing.js";
 
 const { SECRET_KEY, SENDER_EMAIL, SENDER_PASSWORD } = process.env;
 
@@ -77,13 +78,16 @@ export const passwordReset = controllerWrapper(async (req, res) => {
     { temporaryId: uniqueSendId, userId: user._id },
     { new: true, upsert: true }
   );
+  if (!isTemporaryId) {
+    throw HttpError(400, "Bad request");
+  }
   const { userId, temporaryId } = isTemporaryId;
 
   const message = {
     to: email,
     from: SENDER_EMAIL,
     subject: "Hello from Water Tracker!",
-    html: `To recover your password, please click on the <a href="http://localhost:5173/Smart-Foxes-WaterTracker/signin/${userId}/${temporaryId}">New password</a>`,
+    html: `To recover your password, please click on the <a href="http://localhost:5173/Smart-Foxes-WaterTracker/signin/${userId}/${temporaryId} ">New password</a>`,
   };
 
   await transporter.sendMail(message).then().catch(console.error);
@@ -98,19 +102,20 @@ export const passwordChange = controllerWrapper(async (req, res) => {
   const hashPassword = await bcrypt.hash(password, 10);
 
   const idTemp = await PasswordReset.findOne({ userId, temporaryId });
+  if (idTemp === null) {
+    throw HttpError(
+      400,
+      "Your link has expired, please submit a request to update your password"
+    );
+  }
 
-  if (idTemp) {
-    const dateNow = new Date();
-    const { createdAt } = idTemp;
-    const dateCreated = new Date(createdAt);
-    const differents = dateNow.getTime() - dateCreated.getTime();
-    const difHours = differents / 1000 / 60 / 60;
-    if (difHours > 24) {
-      throw HttpError(
-        400,
-        "Your link has expired, please submit a request to update your password"
-      );
-    }
+  const { updatedAt } = idTemp;
+  const time = timing(updatedAt);
+  if (time > 24) {
+    throw HttpError(
+      400,
+      "Your link has expired, please submit a request to update your password"
+    );
   }
 
   const user = await User.findByIdAndUpdate(
@@ -118,10 +123,9 @@ export const passwordChange = controllerWrapper(async (req, res) => {
     { password: hashPassword },
     { new: true }
   );
+
   if (!user) {
-    throw HttpError(400, "Invalid link or expired");
+    throw HttpError(400);
   }
-  console.log(idTemp);
-  console.log(user);
   res.json({ message: "Password reset" });
 });
