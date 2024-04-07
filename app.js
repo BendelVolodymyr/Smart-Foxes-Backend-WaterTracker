@@ -10,7 +10,7 @@ import swaggerDocument from "./swagger.json" assert { type: "json" };
 import waterRateRouter from "./routes/waterRateRoutes.js";
 import usersRouter from "./routes/usersRoutes.js";
 import googleAuthRouter from "./routes/googleAuthRoutes.js";
-//import * as path from "node:path"; для тетстування гугл авторизації
+//import * as path from "node:path"; //для тетстування гугл авторизації
 
 const app = express();
 const { DB_HOST, PORT } = process.env;
@@ -33,7 +33,7 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 
-//const uploadDir = path.join(process.cwd(), "tmp"); для тетстування гугл авторизації
+//const uploadDir = path.join(process.cwd(), "tmp"); //для тетстування гугл авторизації
 // app.use("/link", (req, res) => {
 //   res.sendFile(path.join(process.cwd(), "./link.html"));
 // });
