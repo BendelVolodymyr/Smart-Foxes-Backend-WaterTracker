@@ -16,3 +16,11 @@ export const updateUserSchema = Joi.object({
   gender: Joi.string(),
   avatarURL: Joi.string(),
 });
+
+export const passwordResetSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+
+export const passwordUpdateSchema = Joi.object({
+  password: Joi.string().required(),
+});
