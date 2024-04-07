@@ -34,6 +34,7 @@ const usersSchema = new Schema(
       type: Number,
       min: 0,
       max: 15000,
+      default: 2000,
     },
     token: {
       type: String,
