@@ -1,14 +1,16 @@
+import "dotenv/config";
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
-import "dotenv/config";
 import authRouter from "./routes/authRoutes.js";
 import watersRouter from "./routes/watersRoutes.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.json" assert { type: "json" };
 import waterRateRouter from "./routes/waterRateRoutes.js";
 import usersRouter from "./routes/usersRoutes.js";
+import googleAuthRouter from "./routes/googleAuthRoutes.js";
+//import * as path from "node:path"; для тетстування гугл авторизації
 
 const app = express();
 const { DB_HOST, PORT } = process.env;
@@ -30,6 +32,13 @@ mongoose
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
+
+//const uploadDir = path.join(process.cwd(), "tmp"); для тетстування гугл авторизації
+// app.use("/link", (req, res) => {
+//   res.sendFile(path.join(process.cwd(), "./link.html"));
+// });
+
+app.use("/api/auth", googleAuthRouter);
 
 app.use("/api/users", authRouter, usersRouter);
 

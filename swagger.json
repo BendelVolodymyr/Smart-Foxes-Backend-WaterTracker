@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "2.0.4",
+    "version": "2.0.5",
     "title": "Water tracker",
-    "description": "API documentation for project Water tracker",
+    "description": "![Water Tracker Logo](https://res.cloudinary.com/doj55bihz/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1704651372/img/Logo-890d13ba_to7trg.jpg?_s=public-apps)\n\n Main page [() => {}](https://bendelvolodymyr.github.io/Smart-Foxes-WaterTracker/welcome)\n\n API documentation for project Water tracker. \n\nWaterTracker is an application that allows users to monitor their daily water consumption.\n\n**Features:**\n\n- User registration and login using password or Google Auth.\n- Password recovery through email confirmation request.\n- User authorization and logout functionalities.\n- Editing user data (avatar, name, email, password).\n- Changing the calculation of the daily rate of water consumption.\n- Adding, updating, and deleting a record of consumed water.\n- Calculation of the amount of water for the current day or the selected month. \n\n**Technologies and packages used:**\n\n- Node.js\n- Axios\n- Bcrypt\n- Cloudinary\n- CORS\n- Dotenv\n- Express\n- Jest\n- Jimp\n- Joi\n- JSONWebToken(JWT)\n- Moment\n- MongoDB\n- Mongoose\n- Morgan\n- Multer\n- Nano ID\n- Nodemailer\n- Query string\n- Swagger-ui-express\n- Nodemon\n\n**Contributors:**\n- Yuliya Turasova [LinkedIn](https://www.linkedin.com/in/yuliya-turasova/) || [GitHub](https://github.com/turasova)\n- Tymur Prysiazhniuk [LinkedIn](https://www.linkedin.com/in/tymur-prysiazhniuk/) || [GitHub](https://github.com/AQR88)\n- Daria Korolenko [LinkedIn](https://www.linkedin.com/in/dariakorolenko/) || [GitHub](https://github.com/KorolenkoDaria).",
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
@@ -1115,6 +1115,16 @@
         }
       },
 
+      "PasswordResetRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          }
+        }
+      },
       "PasswordResetRequest": {
         "type": "object",
         "properties": {
