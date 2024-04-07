@@ -5,11 +5,12 @@ import controllerWrapper from "../helpers/controllerWrapper.js";
 export const addPortion = controllerWrapper(async (req, res) => {
   const { _id: owner, waterRate } = req.user;
   const { waterVolume, date } = req.body;
+
   const dateAdded = new Date(date.replace(/T/, " "));
   const createPortion = await Water.create({
     dateAdded,
     waterVolume,
-    waterRate: 1500,
+    waterRate,
     owner,
   });
   if (!createPortion) {
@@ -28,16 +29,16 @@ export const addPortion = controllerWrapper(async (req, res) => {
 export const updatePortion = controllerWrapper(async (req, res) => {
   const { _id: owner } = req.user;
   const { id } = req.params;
-  const { waterVolume } = req.body;
+  const { waterVolume, date } = req.body;
+  const dateAdded = new Date(date.replace(/T/, " "));
   const dataUpdated = await Water.findOneAndUpdate(
     { owner, _id: id },
-    { waterVolume: waterVolume },
+    { waterVolume: waterVolume, dateAdded: dateAdded },
     { new: true }
   );
   if (!dataUpdated) {
     throw HttpError(404, "Update failed. Please try again later.");
   }
-  const { dateAdded } = dataUpdated;
   res.json({ data: { id, waterVolume, dateAdded } });
 });
 
@@ -48,6 +49,7 @@ export const deletePortion = controllerWrapper(async (req, res) => {
   if (!deletedPortion) {
     throw HttpError(404, "Delete failed. Please try again later.");
   }
+
   res.json({
     data: deletedPortion,
     message: "The portion was successfully deleted.",
