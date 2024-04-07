@@ -193,7 +193,7 @@
         }
       }
     },
-    "/api/users/": {
+    "/api/users": {
       "patch": {
         "tags": ["User"],
         "summary": "Update user profile",
@@ -232,7 +232,7 @@
         }
       }
     },
-    "/api/water-rate/": {
+    "/api/water-rate": {
       "patch": {
         "tags": ["WaterRate"],
         "summary": "Change user's water rate",
