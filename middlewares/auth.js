@@ -30,7 +30,9 @@ export const authenticate = async (req, res, next) => {
         id: decode.id,
       };
     });
+
     const user = await User.findById(req.user.id);
+
     if (!user || !user.token || user.token !== token) {
       throw HttpError(401, "Not authorized");
     }
