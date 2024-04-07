@@ -1,7 +1,7 @@
 import "dotenv/config";
 import queryString from "query-string";
 import axios from "axios";
-import { authGoogleHelper } from "../helpers/authGoogle.js";
+import { authGoogle } from "../helpers/authGoogle.js";
 
 const { BACKEND_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, FRONTEND_URL } =
   process.env;
@@ -52,9 +52,9 @@ export const googleRedirect = async (req, res) => {
     },
   });
 
-  const { token } = await authGoogleHelper(userData.data);
+  const { token } = await authGoogle(userData.data);
 
-  return res.redirect(`${FRONTEND_URL}/api/auth?token=${token}`);
+  return res.redirect(`${FRONTEND_URL}?token=${token}`);
   // userData.data.email;
   //return res.redirect(`${TEST_FRONT}?email=${userData.data.email}`);
 };

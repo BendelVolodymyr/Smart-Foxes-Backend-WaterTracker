@@ -6,12 +6,11 @@ import { nanoid } from "nanoid";
 
 const { SECRET_KEY } = process.env;
 
-export const authGoogleHelper = async (userData) => {
+export const authGoogle = async (userData) => {
   const { email, name, picture } = userData;
 
-  const userExist = await User.findOne({ email });
-  if (!userExist) {
-    const verificationToken = nanoid();
+  const user = await User.findOne({ email });
+  if (!user) {
     const passwordHash = await bcrypt.hash(nanoid(), 10);
 
     const newUser = await User.create({
@@ -19,22 +18,23 @@ export const authGoogleHelper = async (userData) => {
       password: passwordHash,
       name,
       avatarUrl: picture,
-      verificationToken,
     });
+
     const payload = {
       id: newUser._id,
     };
 
     const token = Jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
     await User.findByIdAndUpdate(newUser._id, { token });
+
     return token;
   } else {
     const payload = {
-      id: userExist._id,
+      id: user._id,
     };
 
     const token = Jwt.sing(payload, SECRET_KEY, { expiresIn: "24h" });
-    await User.findByIdAndUpdate(userExist._id, { token });
+    await User.findByIdAndUpdate(user._id, { token });
 
     return token;
   }
@@ -42,24 +42,28 @@ export const authGoogleHelper = async (userData) => {
 
 //Second variant????
 
-// export const authGoogleHelper = async (userData) => {
+// export const authGoogle = async (userData) => {
 //   const { email } = userData;
 
-//   let user = await User.findOne({ email }).select("+password");
+//   const user = await User.findOne({ email }).select("+password");
 
 //   if (!user) {
-//     user = await User.create({
+//     const passwordHash = await bcrypt.hash(nanoid(), 10);
+
+//     const newUser = await User.create({
 //       name: userData.name,
 //       email,
-//       password: "google12345",
+//       password: passwordHash,
 //       avatarUrl: userData.picture,
 //     });
+//         const token = Jwt.sign(newUser._id, SECRET_KEY, { expiresIn: "24h" });
+//         await User.findByIdAndUpdate(newUser._id, { token });
+
+//         return token;
 //   }
 
-//   const payload = {
-//     id: user._id,
-//   };
-//   const token = Jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
+//   const token = Jwt.sign(user._id, SECRET_KEY, { expiresIn: "24h" });
+
 //   user.token = token;
 
 //   await user.save();
