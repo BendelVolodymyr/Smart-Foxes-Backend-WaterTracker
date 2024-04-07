@@ -55,7 +55,7 @@ export const login = controllerWrapper(async (req, res) => {
   };
   const token = Jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
   await User.findOneAndUpdate(user._id, { token });
-  res.json({ email, token });
+  res.json({ user, token });
 });
 
 export const logout = controllerWrapper(async (req, res) => {
