@@ -46,7 +46,7 @@ export const login = controllerWrapper(async (req, res) => {
     throw HttpError(401, "Email or password is incorrect");
   }
 
-  const passwordCompare = bcrypt.compare(password, user.password);
+  const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
     throw HttpError(401, "Email or password is incorrect");
   }
