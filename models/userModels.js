@@ -7,7 +7,8 @@ const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const usersSchema = new Schema(
   {
     name: {
-      type: String, //прибрала required()
+      type: String,
+      default: "User",
     },
     password: {
       type: String,
@@ -51,22 +52,57 @@ const usersSchema = new Schema(
 usersSchema.post("save", handleMongooseError);
 
 export const registerSchema = Joi.object({
-  name: Joi.string(), //прибрала required()
-  email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(8).max(64).required(),
-  gender: Joi.string(),
+  email: Joi.string().pattern(emailRegexp).required().empty(false).messages({
+    "string.base": "The email must be a string.",
+    "any.required": "The email field is required.",
+    "string.empty": "The email must not be empty.",
+    "string.pattern.base": "The email must be in format test@gmail.com.",
+  }),
+  password: Joi.string().min(8).max(64).required().empty(false).messages({
+    "string.base": "The password must be a string.",
+    "any.required": "The password field is required.",
+    "string.empty": "The password can not be empty.",
+  }),
 });
 
 export const loginSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(8).max(64).required(),
+  email: Joi.string().pattern(emailRegexp).required().empty(false).messages({
+    "string.base": "The email must be a string.",
+    "any.required": "The email field is required.",
+    "string.empty": "The email must not be empty.",
+    "string.pattern.base": "The email must be in format test@gmail.com.",
+  }),
+  password: Joi.string().min(8).max(64).required().empty(false).messages({
+    "string.base": "The password must be a string.",
+    "any.required": "The password field is required.",
+    "string.empty": "The password can not be empty.",
+    "string.min":
+      "The password must be at least 8 and no more than 64 characters long",
+  }),
 });
 
 export const updateUserSchema = Joi.object({
   name: Joi.string(),
-  email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().required(),
-  newPassword: Joi.string().required(),
+  email: Joi.string().pattern(emailRegexp).required().empty(false).messages({
+    "string.base": "The email must be a string.",
+    "any.required": "The email field is required.",
+    "string.empty": "The email must not be empty.",
+    "string.pattern.base": "The email must be in format test@gmail.com.",
+  }),
+  password: Joi.string().min(8).max(64).required().empty(false).messages({
+    "string.base": "The password must be a string.",
+    "any.required": "The password field is required.",
+    "string.empty": "The password can not be empty.",
+    "string.min":
+      "The password must be at least 8 and no more than 64 characters long",
+  }),
+  newPassword: Joi.string().min(8).max(64).required().empty(false).messages({
+    "string.base": "The password must be a string.",
+    "any.required": "The password field is required.",
+    "string.empty": "The password can not be empty.",
+    "string.min":
+      "The password must be at least 8 and no more than 64 characters long",
+  }),
   gender: Joi.string(),
   avatarURL: Joi.string(),
 });

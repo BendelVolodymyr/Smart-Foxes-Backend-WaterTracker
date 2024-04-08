@@ -6,9 +6,6 @@ import { authGoogle } from "../helpers/authGoogle.js";
 const { BACKEND_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, FRONTEND_URL } =
   process.env;
 
-// const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, TEST_BACK, TEST_FRONT } =
-//   process.env;
-
 export const googleAuth = async (req, res) => {
   const stringifiedParams = queryString.stringify({
     client_id: GOOGLE_CLIENT_ID,
@@ -55,7 +52,4 @@ export const googleRedirect = async (req, res) => {
   const { token } = await authGoogle(userData.data);
 
   return res.redirect(`${FRONTEND_URL}/api/auth?token=${token}`);
-
-  // userData.data.email;
-  // return res.redirect(`${TEST_FRONT}/api/auth?email=${userData.data.email}`);
 };
