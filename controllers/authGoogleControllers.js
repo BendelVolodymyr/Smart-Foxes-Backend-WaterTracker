@@ -35,16 +35,17 @@ export const googleRedirect = async (req, res) => {
   const tokenData = await axios({
     url: `https://oauth2.googleapis.com/token`,
     method: "post",
-    data: {
+    data: new URLSearchParams({
       client_id: GOOGLE_CLIENT_ID,
       client_secret: GOOGLE_CLIENT_SECRET,
       redirect_uri: `${BACKEND_URL}}/api/auth/google-redirect`,
       grant_type: "authorization_code",
       code,
+    }),
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
     },
   });
-
-  console.log(tokenData);
 
   const userData = await axios({
     url: "https://www.googleapis.com/oauth2/v2/userinfo",
@@ -54,9 +55,7 @@ export const googleRedirect = async (req, res) => {
     },
   });
 
-  console.log(userData);
-
-  const { token } = await authGoogle(userData.data);
+  const token = await authGoogle(userData.data);
 
   return res.redirect(`${FRONTEND_URL}?token=${token}`);
 };
