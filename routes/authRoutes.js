@@ -24,6 +24,7 @@ authRouter.post("/login", validateBody(loginSchema), login);
 
 // logout
 authRouter.post("/logout", authenticate, logout);
+
 // update password
 authRouter.post(
   "/passwordReset",
