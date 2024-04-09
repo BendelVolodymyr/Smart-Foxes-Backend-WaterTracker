@@ -42,27 +42,53 @@ const { SECRET_KEY } = process.env;
 
 //Second variant????
 
+// export const authGoogle = async (userData) => {
+//   const { email } = userData;
+
+//   const user = await User.findOne({ email }).select("+password");
+
+//   if (!user) {
+//     const passwordHash = await bcrypt.hash(nanoid(), 10);
+
+//     const newUser = await User.create({
+//       name: userData.name,
+//       email,
+//       password: passwordHash,
+//       avatarUrl: userData.picture,
+//     });
+//     const token = Jwt.sign(newUser._id, SECRET_KEY, { expiresIn: "24h" });
+//     await User.findByIdAndUpdate(newUser._id, { token });
+
+//     return token;
+//   }
+
+//   const token = Jwt.sign(user._id, SECRET_KEY, { expiresIn: "24h" });
+
+//   user.token = token;
+
+//   await user.save();
+
+//   return { token };
+// };
+
+//The third variant
+
 export const authGoogle = async (userData) => {
   const { email } = userData;
 
-  const user = await User.findOne({ email }).select("+password");
+  let user = await User.findOne({ email }).select("+password");
 
   if (!user) {
     const passwordHash = await bcrypt.hash(nanoid(), 10);
 
-    const newUser = await User.create({
+    user = await User.create({
       name: userData.name,
       email,
       password: passwordHash,
-      avatarUrl: userData.picture,
     });
-    const token = Jwt.sign(newUser._id, SECRET_KEY, { expiresIn: "24h" });
-    await User.findByIdAndUpdate(newUser._id, { token });
-
-    return token;
   }
 
-  const token = Jwt.sign(user._id, SECRET_KEY, { expiresIn: "24h" });
+  const token = Jwt.sign(newUser._id, SECRET_KEY, { expiresIn: "24h" });
 
   user.token = token;
 

@@ -36,7 +36,16 @@ export const register = controllerWrapper(async (req, res) => {
   const token = Jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
   await User.findOneAndUpdate({ _id: newUser._id }, { token });
 
-  res.status(201).json({ email, token });
+  const modifyUser = {
+    name: newUser.name,
+    email: newUser.email,
+    gender: newUser.gender,
+    waterRate: newUser.waterRate,
+    avatarURL: newUser.avatarURL,
+    createAt: newUser.createdAt,
+  };
+
+  res.status(201).json({ user: modifyUser, token });
 });
 
 export const login = controllerWrapper(async (req, res) => {
