@@ -14,7 +14,13 @@ import googleAuthRouter from './routes/googleAuthRoutes.js';
 
 const app = express();
 const { DB_HOST, PORT } = process.env;
+//======================test
+const server = http.createServer(app);
 
+// Налаштування keepAliveTimeout та headersTimeout
+server.keepAliveTimeout = 120000; // 120 секунд
+server.headersTimeout = 120000; // 120 секунд
+//==============================test=============
 mongoose.set('strictQuery', true);
 mongoose
   .connect(DB_HOST)
