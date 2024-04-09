@@ -34,7 +34,7 @@ export const register = controllerWrapper(async (req, res) => {
     id: newUser._id,
   };
   const token = Jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
-  await User.findOneAndUpdate({ userId: newUser._id }, { token });
+  await User.findOneAndUpdate({ _id: newUser._id }, { token });
 
   res.status(201).json({ email, token });
 });
@@ -46,7 +46,7 @@ export const login = controllerWrapper(async (req, res) => {
     throw HttpError(401, "Email or password is incorrect");
   }
 
-  const passwordCompare = bcrypt.compare(password, user.password);
+  const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
     throw HttpError(401, "Email or password is incorrect");
   }
