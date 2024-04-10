@@ -102,5 +102,5 @@ export const authGoogle = async (userData) => {
 
   await user.save();
 
-  return { token };
+  return token;
 };
