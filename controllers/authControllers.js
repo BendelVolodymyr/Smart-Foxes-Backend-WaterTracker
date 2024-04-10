@@ -105,7 +105,7 @@ export const passwordReset = controllerWrapper(async (req, res) => {
     to: email,
     from: SENDER_EMAIL,
     subject: "Hello from Water Tracker!",
-    html: `To recover your password, please click on the <a href="http://localhost:5173/Smart-Foxes-WaterTracker/signin/${userId}/${temporaryId} ">New password</a>`,
+    html: `To recover your password, please click on the <a href="https://bendelvolodymyr.github.io/Smart-Foxes-WaterTracker/forgotPassword/${userId}/${temporaryId} ">New password</a>`,
   };
 
   await transporter.sendMail(message).then().catch(console.error);
