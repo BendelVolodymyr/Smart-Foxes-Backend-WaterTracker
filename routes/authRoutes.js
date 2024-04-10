@@ -1,6 +1,6 @@
 import express from "express";
 import validateBody from "../helpers/validateBody.js";
-import { registerSchema, loginSchema } from "../models/userModels.js";
+import { registerSchema, loginSchema } from "../sсhemas/userSchema.js";
 import {
   login,
   logout,
@@ -16,15 +16,12 @@ import {
 
 const authRouter = express.Router();
 
-// signup
 authRouter.post("/register", validateBody(registerSchema), register);
 
-// signin
 authRouter.post("/login", validateBody(loginSchema), login);
 
-// logout
 authRouter.post("/logout", authenticate, logout);
-// update password
+
 authRouter.post(
   "/passwordReset",
   validateBody(passwordResetSchema),

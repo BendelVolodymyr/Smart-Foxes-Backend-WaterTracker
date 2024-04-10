@@ -9,5 +9,9 @@ export const addPortionSchema = Joi.object({
 
 export const updatePortionSchema = Joi.object({
   waterVolume: Joi.number().required().min(1).max(5000),
-  date: Joi.string().pattern(dateRegex).required(),
+  date: Joi.string().pattern(dateRegex).required().messages({
+    "string.pattern.base":
+      "Date should match the format YYYY-MM-DDTHH:mm:ss.SSSZ",
+    "string.empty": "Date is required",
+  }),
 });
