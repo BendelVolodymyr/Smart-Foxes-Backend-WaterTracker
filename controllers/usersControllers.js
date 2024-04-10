@@ -12,7 +12,6 @@ export const getCurrentUser = (req, res) => {
   const { email, avatarURL = null, gender, waterRate, name = "" } = req.user;
   res.json({
     email,
-    avatarURL,
     gender,
     waterRate,
     name,
