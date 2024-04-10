@@ -53,7 +53,7 @@ export const googleRedirect = async (req, res) => {
     },
   });
 
-  const { token } = await authGoogle(userData.data);
+  const token = await authGoogle(userData.data);
 
   return res.redirect(`${FRONTEND_URL}?token=${token}`);
 };

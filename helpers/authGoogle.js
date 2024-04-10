@@ -7,20 +7,19 @@ import { nanoid } from "nanoid";
 const { SECRET_KEY } = process.env;
 
 // export const authGoogle = async (userData) => {
-//   const { email, name, picture } = userData;
+//   const { email, given_name, picture } = userData;
 
 //   const user = await User.findOne({ email });
 
 //   if (!user) {
-//     const tokenVerify = nanoid();
+//
 //     const passwordHash = await bcrypt.hash(nanoid(), 10);
 
 //     const newUser = await User.create({
 //       email,
 //       password: passwordHash,
-//       name,
-//       tokenVerify,
-//       avatarURL: picture || null,
+//       name:given_name,
+//       avatarURL: picture,
 //     });
 
 //     const payload = {
@@ -102,5 +101,5 @@ export const authGoogle = async (userData) => {
 
   await user.save();
 
-  return { token };
+  return token;
 };
