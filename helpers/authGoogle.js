@@ -96,7 +96,7 @@ export const authGoogle = async (userData) => {
     });
   }
 
-  const token = Jwt.sign(newUser._id, SECRET_KEY, { expiresIn: "24h" });
+  const token = Jwt.sign(user._id, SECRET_KEY, { expiresIn: "24h" });
 
   user.token = token;
 
