@@ -40,6 +40,7 @@ export const googleRedirect = async (req, res) => {
       code,
     },
   });
+  //console.log(data.code);
 
   const userData = await axios({
     url: "https://www.googleapis.com/oauth2/v2/userinfo",
@@ -50,5 +51,6 @@ export const googleRedirect = async (req, res) => {
   });
 
   const token = await authGoogle(userData.data);
+
   return res.redirect(`${FRONTEND_URL}?token=${token}`);
 };
