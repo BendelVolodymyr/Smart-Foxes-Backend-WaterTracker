@@ -36,7 +36,7 @@ export const authGoogle = async (userData) => {
       id: user._id,
     };
 
-    const token = Jwt.sing(payload, SECRET_KEY, { expiresIn: "24h" });
+    const token = Jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
     await User.findByIdAndUpdate(user._id, { token });
 
     return token;
