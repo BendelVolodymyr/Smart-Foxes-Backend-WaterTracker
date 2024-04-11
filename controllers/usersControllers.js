@@ -2,11 +2,12 @@ import bcrypt from "bcrypt";
 import { User } from "../models/userModels.js";
 import HttpError from "../helpers/HttpError.js";
 import * as fs from "node:fs/promises";
-import * as path from "node:path";
-import Jimp from "jimp";
-import * as crypto from "node:crypto";
+//import * as path from "node:path";
+import cloudinary from "../middlewares/cloudinary.js";
+// import Jimp from "jimp";
+// import * as crypto from "node:crypto";
 
-const avatarsDir = path.join(process.cwd(), "public/avatars");
+//const avatarsDir = path.join(process.cwd(), "public/avatars");
 
 export const getCurrentUser = (req, res) => {
   const { email, gender, waterRate, name = "" } = req.user;
@@ -59,29 +60,53 @@ export const updateInfoUser = async (req, res, next) => {
   }
 };
 
+// export const uploadAvatarUser = async (req, res, next) => {
+//   try {
+//     if (!req.file) {
+//       throw HttpError(400, "Avatar must be provided");
+//     }
+//     const { _id } = req.user;
+//     const { path: tmpUpload, originalname } = req.file;
+//     if (!req.user) {
+//       throw HttpError(401, { message: "Not authorized" });
+//     }
+//     await Jimp.read(tmpUpload)
+//       .then((avatar) => {
+//         return avatar.resize(250, 250).quality(60).write(tmpUpload);
+//       })
+//       .catch((error) => {
+//         throw error;
+//       });
+//     const prefix = crypto.randomUUID();
+//     const fileName = `${prefix}_${_id}_${originalname}`;
+//     const publicUpload = path.join(avatarsDir, fileName);
+//     await fs.rename(tmpUpload, publicUpload);
+//     const avatarURL = path.join("avatars", fileName);
+//     await User.findByIdAndUpdate(_id, { avatarURL });
+//     res.json({
+//       avatarURL,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 export const uploadAvatarUser = async (req, res, next) => {
   try {
     if (!req.file) {
       throw HttpError(400, "Avatar must be provided");
     }
     const { _id } = req.user;
-    const { path: tmpUpload, originalname } = req.file;
-    if (!req.user) {
-      throw HttpError(401, { message: "Not authorized" });
-    }
-    await Jimp.read(tmpUpload)
-      .then((avatar) => {
-        return avatar.resize(250, 250).quality(60).write(tmpUpload);
-      })
-      .catch((error) => {
-        throw error;
-      });
-    const prefix = crypto.randomUUID();
-    const fileName = `${prefix}_${_id}_${originalname}`;
-    const publicUpload = path.join(avatarsDir, fileName);
-    await fs.rename(tmpUpload, publicUpload);
-    const avatarURL = path.join("avatars", fileName);
+    const { path } = req.file;
+    const { url: avatarURL } = await cloudinary.uploader.upload(req.file.path, {
+      folder: "user_avatars",
+      width: 250,
+      height: 250,
+      crop: "pad",
+    });
+    await fs.unlink(path);
     await User.findByIdAndUpdate(_id, { avatarURL });
+
     res.json({
       avatarURL,
     });
