@@ -43,7 +43,6 @@ export const googleRedirect = async (req, res) => {
       "Content-Type": "application/x-www-form-urlencoded",
     },
   });
-  //console.log(data.code);
 
   const userData = await axios({
     url: "https://www.googleapis.com/oauth2/v2/userinfo",
