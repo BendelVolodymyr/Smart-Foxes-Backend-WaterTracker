@@ -17,8 +17,8 @@ export const loginSchema = Joi.object({
 export const updateUserSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string().pattern(emailRegexp),
-  oldPassword: Joi.string().required(),
-  newPassword: Joi.string().required(),
+  oldPassword: Joi.string(),
+  newPassword: Joi.string(),
   gender: Joi.string(),
   avatarURL: Joi.string(),
 });
