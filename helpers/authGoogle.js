@@ -7,7 +7,7 @@ import { nanoid } from "nanoid";
 const { SECRET_KEY } = process.env;
 
 export const authGoogle = async (userData) => {
-  const { email, name, picture } = userData;
+  const { email } = userData;
 
   const user = await User.findOne({ email });
 
@@ -17,8 +17,8 @@ export const authGoogle = async (userData) => {
     const newUser = await User.create({
       email,
       password: passwordHash,
-      name: name,
-      avatarURL: picture,
+      name: userData.name,
+      avatarURL: userData.picture,
       tokenVerify,
     });
 

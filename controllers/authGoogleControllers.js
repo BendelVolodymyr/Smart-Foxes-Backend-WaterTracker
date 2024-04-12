@@ -51,6 +51,7 @@ export const googleRedirect = async (req, res) => {
       Authorization: `Bearer ${tokenData.data.access_token}`,
     },
   });
+  console.log(userData);
 
   const token = await authGoogle(userData.data);
 
