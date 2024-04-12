@@ -5,12 +5,13 @@ import * as fs from "node:fs/promises";
 import cloudinary from "../middlewares/cloudinary.js";
 
 export const getCurrentUser = (req, res) => {
-  const { email, gender, waterRate, name = "" } = req.user;
+  const { email, gender, waterRate, name = "", avatarURL } = req.user;
   res.json({
     email,
     gender,
     waterRate,
     name,
+    avatarURL,
   });
 };
 

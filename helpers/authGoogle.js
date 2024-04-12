@@ -18,6 +18,7 @@ export const authGoogle = async (userData) => {
       email,
       password: passwordHash,
       name: userData.name,
+      avatarURL: userData.picture,
       tokenVerify,
     });
 
